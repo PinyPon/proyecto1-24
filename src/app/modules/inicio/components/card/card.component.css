@@ -1,0 +1,9 @@
+.tarjeta{
+    width: 200px;
+    background-color: hotpink;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 50px;
+}
