@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 //Lo que ve el usuario
 import { InicioRoutingModule } from './inicio-routing.module';
+import { InicioComponent } from './components/inicio/inicio.component';
 
 //componente(tarjeta)
 import { CardComponent } from './components/card/card.component';
@@ -10,7 +11,7 @@ import { CardComponent } from './components/card/card.component';
 //cosas de angular material
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import { InicioComponent } from './components/inicio/inicio.component';
+
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { InicioComponent } from './components/inicio/inicio.component';
     InicioComponent
   ],
   imports: [
+    //importamos desde la web y traemos al modulo
     CommonModule,
     InicioRoutingModule,
     MatButtonModule,
@@ -25,6 +27,7 @@ import { InicioComponent } from './components/inicio/inicio.component';
   ],
 
   exports: [
+    //exportamos al resto de la pagina
     MatButtonModule,
     MatCardModule
   ]

@@ -1,5 +1,7 @@
 export interface Potones {
     id: string;
-    raza: string;
+    nombre: string;
     cantidad: number;
+    imagen: string
+    alt: string
 }

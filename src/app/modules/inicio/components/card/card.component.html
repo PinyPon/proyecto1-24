@@ -1,12 +1,16 @@
-<p>card works!</p>
-<div class="tarjeta">
-<mat-card class="example-card">
+<div class="container">
+  <div class="row">
+<h1>Inicio</h1>
+<div class="col">
+  <div *ngFor="let i of info" class="contenido">
+    <div class="tarjeta">
+  <mat-card class="example-card">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Shake Inu</mat-card-title>
-      <mat-card-subtitle>Dance Breed</mat-card-subtitle>
+      <mat-card-title>{{i.nombre}}</mat-card-title>
+      <mat-card-subtitle>{{i.cantidad}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image src="https://i.pinimg.com/originals/12/30/f2/1230f28b9c10750865e0958be39ddff0.gif" width="100px" alt="Photo">
+    <img mat-card-image src={{i.imagen}} width="100px" alt="Photo">
     <mat-card-content>
       <p>
         The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
@@ -19,6 +23,8 @@
       <button mat-button>SHAKE</button>
     </mat-card-actions>
   </mat-card>
-
-  
+</div>
+  </div>
+</div>
+  </div>
 </div>
