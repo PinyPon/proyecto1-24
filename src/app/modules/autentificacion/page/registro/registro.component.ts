@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario';
 
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+
+
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
@@ -20,7 +24,14 @@ password:''
 
 coleccionUsuario: Usuario[] = [];
 
-registrar(){
+constructor(
+  public servicioAuth: AuthService,
+  public servicioRutas: Router
+){}
+
+
+
+/registrar(){
   const credenciales = {
     uid: this.usuarios.uid,
     nombre: this.usuarios.nombre,
