@@ -29,9 +29,29 @@ constructor(
   public servicioRutas: Router
 ){}
 
+async registro (){
+
+  const credenciales = {
+    email: this.usuarios.email,
+    password: this.usuarios.password
+  }
+//constante respuesta
+  const res = await this.servicioAuth.registrar(credenciales.email, credenciales.password)
+  .then(res=>
+  {
+    alert("Accedió");
+
+    this.servicioRutas.navigate(['/inicio'])
+  }
+  )   
+  //toma el  y lo convierte en un error
+  .catch(error=>{
+    alert("Hubo en error al registrar\n"+error)
+  })
+}
 
 
-/registrar(){
+/* registrar(){
   const credenciales = {
     uid: this.usuarios.uid,
     nombre: this.usuarios.nombre,
@@ -65,5 +85,5 @@ limpiar(){
     password: this.usuarios.password ='',
   }
 }
-
+*/
 }
