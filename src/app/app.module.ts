@@ -26,7 +26,7 @@ import {AngularFireStorageModule} from '@angular/fire/compat/storage';
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebaseConfig),//inicializamos FB 
     AngularFireAuthModule,
     AngularFireStorageModule
   ],

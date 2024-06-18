@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario';
-
+//Import servicio de autentificacion
 import { AuthService } from '../../services/auth.service';
+//import servicio de Firestore
+import { FirestoreService } from 'src/app/modules/shared/services/firestore.service';
+//import comp rutas de Angular
 import { Router } from '@angular/router';
 
 
@@ -26,11 +29,12 @@ coleccionUsuario: Usuario[] = [];
 
 constructor(
   public servicioAuth: AuthService,
+  public servicioFirestore: FirestoreService,
   public servicioRutas: Router
 ){}
 
 async registro (){
-
+/*
   const credenciales = {
     email: this.usuarios.email,
     password: this.usuarios.password
@@ -48,8 +52,13 @@ async registro (){
   .catch(error=>{
     alert("Hubo en error al registrar\n"+error)
   })
+  */
 }
 
+//Funcion  que accede al servicio Firestore y envia la info junto uid
+guardaraUsuario(){
+  this.servicioFirestore.agregarUsuario(this.usuarios, this.usuarios.uid)
+}
 
 /* registrar(){
   const credenciales = {

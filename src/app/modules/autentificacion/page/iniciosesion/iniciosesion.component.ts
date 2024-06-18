@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario';
+import { AuthService } from '../../services/auth.service';
+import { FirestoreService } from 'src/app/modules/shared/services/firestore.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-iniciosesion',
@@ -7,8 +10,16 @@ import { Usuario } from 'src/app/models/usuario';
   styleUrls: ['./iniciosesion.component.css']
 })
 export class IniciosesionComponent {
+  //Variable booleana
   hide = true
 
+  constructor(
+    public servicioAuth: AuthService,
+    public servicioFirestore: FirestoreService,
+    public servicioRutas: Router
+  ){}
+  
+//Importar la interfaz de usuario
   usuarios: Usuario = {
     uid: '',
     nombre: '',
@@ -17,7 +28,8 @@ export class IniciosesionComponent {
     rol: '',
     password: '',
   }
-  Inicio_sesion() {
+  async IniciarSesion() {
+    /* 
 
     const cuenta = {
       uid: this.usuarios.uid,
@@ -45,10 +57,28 @@ export class IniciosesionComponent {
       console.log('User data not found in local storage')
     }
     //console.log(localStorage.getItem(cuenta.emai
+*/
 
-    this.limpiar()
+    const credenciales = {
+      email: this.usuarios.email,
+      password: this.usuarios.password
+    }
+
+    const res = await this.servicioAuth.IniciarSesion(credenciales.email, credenciales.password)
+.then(res=> {
+  alert("Correcto ingreso")
+
+  this.servicioRutas.navigate(['/inicio'])
+})
+.catch(err => {
+  alert("Hubo un problema: "+ err);
+  this.limpiarInputs
+
+})
+
+    this.limpiarInputs()
   }
-  limpiar(){
+  limpiarInputs(){
     const input = {
       uid: this.usuarios.uid ='',
       nombre: this.usuarios.nombre ='',
