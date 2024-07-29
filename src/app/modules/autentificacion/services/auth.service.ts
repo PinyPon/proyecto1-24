@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth} from '@angular/fire/compat/auth';
+import { FirestoreService } from '../../shared/services/firestore.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +10,10 @@ export class AuthService {
   //referencia Auth de FB en el servicio
 
 //el constructor inicializa un objeto de una clase
-  constructor(public auth: AngularFireAuth) {}
+  constructor(
+    private auth: AngularFireAuth, 
+    private servicioFirestore: AngularFirestore
+  ){}
 
 //funcion para registro
   registrar(email: string, password: string){
@@ -35,6 +40,7 @@ export class AuthService {
     Si el usuario no respeta la estructura de la interfaz/ Si hay problemas
     */
 
+
     if (user == null) {
       return null
     } else {
@@ -42,6 +48,14 @@ export class AuthService {
     }
 
   }
- 
+
+
+  obtenerUsuario(email: string){
+    /*
+    retornamos del servicio Firestore la coleccion de 'usuarios', buscamos una referencia en los emails
+    registrados y los vuelve 
+    */
+    return this.servicioFirestore.collection('usuarios', ref => ref.where('email', '==', email)).get().toPromise();
+  }
   
 }

@@ -1,12 +1,18 @@
 <mat-toolbar>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <button id="menuSelecciones" mat-icon-button class="example-icon"[matMenuTriggerFor]="seccion"> 
       <mat-icon>menu</mat-icon>
     </button>
+<!-- Menú desplegable para pantallas pequeñas -->
+    <mat-menu #seccion="matMenu">
+      <button mat-menu-item routerLink="/inicio">Inicio</button>
+      <button mat-menu-item routerLink="/producto">General</button>
+    </mat-menu>
     <span>My App</span>
     <!--boton inicio-->
-    <button mat-button routerLink="/inicio">Inicio</button>
+    <button id="meniInicio" mat-button routerLink="/inicio">Inicio</button>
+    
     <!--Productos-->
-    <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+    <button id="menuProducto" mat-button [matMenuTriggerFor]="menu">Menu</button>
 <mat-menu #menu="matMenu">
   <button mat-menu-item routerLink="/producto">General</button>
   <button mat-menu-item routerLink="/crema">Cremas</button>

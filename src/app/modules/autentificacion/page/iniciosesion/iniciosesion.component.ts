@@ -3,6 +3,8 @@ import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from '../../services/auth.service';
 import { FirestoreService } from 'src/app/modules/shared/services/firestore.service';
 import { Router } from '@angular/router';
+import * as CryptoJS from 'crypto-js';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-iniciosesion',
@@ -17,9 +19,9 @@ export class IniciosesionComponent {
     public servicioAuth: AuthService,
     public servicioFirestore: FirestoreService,
     public servicioRutas: Router
-  ){}
-  
-//Importar la interfaz de usuario
+  ) { }
+
+  //Importar la interfaz de usuario
   usuarios: Usuario = {
     uid: '',
     nombre: '',
@@ -64,28 +66,72 @@ export class IniciosesionComponent {
       password: this.usuarios.password
     }
 
-    const res = await this.servicioAuth.IniciarSesion(credenciales.email, credenciales.password)
-.then(res=> {
-  alert("Correcto ingreso")
+    try{
+      const usuarioBD = await this.servicioAuth.obtenerUsuario(credenciales.email);
+      if (!usuarioBD || usuarioBD.empty){
+        Swal.fire({
+          title: "Oh oh..",
+          text: "¿Ya registraste tu correo?",
+          icon: "question"
+        });
+        this.limpiarInputs();
+        return;
+      }
 
-  this.servicioRutas.navigate(['/inicio'])
-})
-.catch(err => {
-  alert("Hubo un problema: "+ err);
-  this.limpiarInputs
+      const usuarioDoc = usuarioBD.docs[0];
+      const usuarioData = usuarioDoc.data() as Usuario;
+      const hashedPassword = CryptoJS.SHA256(credenciales.password).toString();
 
-})
+      if (hashedPassword !== usuarioData.password) {
+        alert ("Contraseña incorrecta");
 
+        this.usuarios.password = '';
+        return;
+      }
+
+      const res = await this.servicioAuth.iniciarSesion(credenciales.email, credenciales.password)
+      .then(res => {
+        Swal.fire({
+          title: "😉​",
+          text: "Correcto ingreso",
+          icon: "success"
+        });
+        alert("")
+
+        this.servicioRutas.navigate(['/inicio'])
+      })
+      .catch(err => {
+        alert("Hubo un problema: " + err);
+        this.limpiarInputs
+
+      })
+      catch(error){
+        this.limpiarInputs();
+      }
+      const uid = await this.servicioAuth.obtenerUid();
+      //Llamamos a la funcion
+      this.usuarios.uid = uid
+      //Llamamos a la funcion guardar u
+        //Llamamos a funcion limpiar para ejecutarla
     this.limpiarInputs()
-  }
-  limpiarInputs(){
+  }usuario
+      this.guardarUsuarios();
+  
+
+      
+    }
+
+    
+
+  guardarUsuarios(){}
+  limpiarInputs() {
     const input = {
-      uid: this.usuarios.uid ='',
-      nombre: this.usuarios.nombre ='',
-      apellido: this.usuarios.apellido ='',
-      email: this.usuarios.email ='',
-      rol: this.usuarios.rol ='',
-      password: this.usuarios.password ='',
+      uid: this.usuarios.uid = '',
+      nombre: this.usuarios.nombre = '',
+      apellido: this.usuarios.apellido = '',
+      email: this.usuarios.email = '',
+      rol: this.usuarios.rol = '',
+      password: this.usuarios.password = '',
     }
   }
 
