@@ -6,25 +6,33 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/comp
   providedIn: 'root'
 })
 export class CrudService {
+  // Definimos colección para los productos de la web
   private productosCollection: AngularFirestoreCollection<Producto>
 
-  constructor(private database:  AngularFirestore) {
+  constructor(private database: AngularFirestore) {
     this.productosCollection = database.collection('producto');
-   }
+  }
 
-   //Crear productos
-   crearProducto(producto: Producto){
-    return new Promise(async(resolve, reject)=>{
+  // CREAR productos
+  crearProducto(producto: Producto){
+    return new Promise(async(resolve, reject) => {
       try{
+        // Creamos número identificativo para el producto en la base de datos
         const idProducto = this.database.createId();
-        producto.idProducto = idProducto
-  
-        const resultado = await this.productosCollection.doc(idProducto).set(producto);
-        resolve(resultado)
-      }catch (error){
-        reject(error)
-      }
 
+        // Asignamos ID creado al atributo idProducto de la interfaz Producto
+        producto.idProducto = idProducto;
+
+        const resultado = await this.productosCollection.doc(idProducto).set(producto);
+
+        resolve(resultado);
+      } catch (error){
+        reject(error);
+      }
     })
-   }
+  }
+
+  // OBTENER productos
+  // EDITAR productos
+  // ELIMINAR productos
 }

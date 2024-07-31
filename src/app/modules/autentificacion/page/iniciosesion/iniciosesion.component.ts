@@ -66,9 +66,9 @@ export class IniciosesionComponent {
       password: this.usuarios.password
     }
 
-    try{
+    try {
       const usuarioBD = await this.servicioAuth.obtenerUsuario(credenciales.email);
-      if (!usuarioBD || usuarioBD.empty){
+      if (!usuarioBD || usuarioBD.empty) {
         Swal.fire({
           title: "Oh oh..",
           text: "¿Ya registraste tu correo?",
@@ -83,47 +83,33 @@ export class IniciosesionComponent {
       const hashedPassword = CryptoJS.SHA256(credenciales.password).toString();
 
       if (hashedPassword !== usuarioData.password) {
-        alert ("Contraseña incorrecta");
+        alert("Contraseña incorrecta");
 
         this.usuarios.password = '';
         return;
       }
 
       const res = await this.servicioAuth.iniciarSesion(credenciales.email, credenciales.password)
-      .then(res => {
-        Swal.fire({
-          title: "😉​",
-          text: "Correcto ingreso",
-          icon: "success"
-        });
-        alert("")
+        .then(res => {
+          Swal.fire({
+            title: "😉​",
+            text: "Correcto ingreso",
+            icon: "success"
+          });
+          alert("")
 
-        this.servicioRutas.navigate(['/inicio'])
-      })
-      .catch(err => {
-        alert("Hubo un problema: " + err);
-        this.limpiarInputs
+          this.servicioRutas.navigate(['/inicio'])
+        })
+        .catch(err => {
+          alert("Hubo un problema: " + err);
+          this.limpiarInputs()
 
-      })
-      catch(error){
+        })
+      }catch (error) {
         this.limpiarInputs();
       }
-      const uid = await this.servicioAuth.obtenerUid();
-      //Llamamos a la funcion
-      this.usuarios.uid = uid
-      //Llamamos a la funcion guardar u
-        //Llamamos a funcion limpiar para ejecutarla
-    this.limpiarInputs()
-  }usuario
-      this.guardarUsuarios();
-  
+  }
 
-      
-    }
-
-    
-
-  guardarUsuarios(){}
   limpiarInputs() {
     const input = {
       uid: this.usuarios.uid = '',
@@ -134,7 +120,4 @@ export class IniciosesionComponent {
       password: this.usuarios.password = '',
     }
   }
-
-
-
 }

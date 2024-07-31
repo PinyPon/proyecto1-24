@@ -10,7 +10,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class TableComponent {
 coleccionProductos: Producto[] = [];
-//definimos formularios para los productos
+// Definimos formulario para los productos
+  /**
+   * Atributos alfanuméricos (string) se inicializan con comillas simples
+   * Atributos numéricos (number) se inicializan con cero ('0')
+   */
 producto = new FormGroup({
   nombre: new FormControl('', Validators.required),
   precio: new FormControl(0,Validators.required),
