@@ -13,6 +13,10 @@ export class TableComponent {
   // Creamos colección local de productos -> la definimos como array
   coleccionProductos: Producto[] = [];
 
+  productoSeleccionado!: Producto; // !<= indica que puede tomar valores vacios
+
+  modalVisibleProducto: boolean = false
+
   // Definimos formulario para los productos
   /**
    * Atributos alfanuméricos (string) se inicializan con comillas simples
@@ -64,4 +68,21 @@ export class TableComponent {
     }
 
   }
+
+  mostrarBorrar(productoSeleccionado: Producto) {
+    this.modalVisibleProducto = true;
+
+    this.productoSeleccionado = productoSeleccionado
+  }
+
+
+borrarProducto(){ 
+  this.servicioCrud.eliminarProducto(this.productoSeleccionado.idProducto)
+  .then(respuesta=>{
+    alert ("no se pudo")
+  })
+  .catch(error=>{
+    alert("si se pudo")
+  })
+}
 }
