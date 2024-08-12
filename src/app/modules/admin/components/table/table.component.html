@@ -41,3 +41,71 @@
     </tr>
 </tbody>
 </table>
+
+<!-- Boton para agregar un nuevo producto -->
+<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#agregarproducto">
+    Agregar un nuevo producto
+  </button>
+  
+  <!-- Modal para agregar un nuevo producto-->
+  <div class="modal fade" id="agregarproducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Agregue un nuevo producto</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Cuerpo del modal -->
+
+        <!-- Nombre -->
+        <div [formGroup]="producto" class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Ingrese el nombre del producto</label>
+            <input class="form-control" type="text" formControlName="nombre">
+          </div>
+        </div>
+
+        <!-- Precio -->
+            <div class="mb-3">
+              <label class="form-label">Ingrese el precio del producto</label>
+              <input class="form-control" type="number" formControlName="precio">
+            </div>
+
+          <!-- Descripción -->
+            <div class="mb-3">
+              <label class="form-label">Ingrese la descripción del producto</label>
+              <input class="form-control" type="text" formControlName="descripción">
+            </div>
+
+          <!-- Categoria -->
+            <div class="mb-3">
+              <label class="form-label">Seleccione la categoria del producto</label>
+              <select class="form-control" formControlName="categoria">
+                <option value="crema">Crema</option>
+                <option value="ejercicios">Ejercicios</option>
+                <option value="indumentaria">Indumentaria</option>
+              </select>
+            </div>
+
+          <!-- Imagen -->
+            <div class="mb-3">
+              <label class="form-label">Ingrese la imagen del producto</label>
+              <input class="form-control" type="text" formControlName="imagen">
+            </div>
+        
+
+          <!-- Alt -->
+            <div class="mb-3">
+              <label class="form-label">Ingrese el alt de la imagen</label>
+              <input class="form-control" type="text" formControlName="alt">
+            </div>
+
+        <!-- Acciones del modal -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-succes" (click)="agregarProducto()" data-bs-dismiss="modal">Guardar</button>
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>

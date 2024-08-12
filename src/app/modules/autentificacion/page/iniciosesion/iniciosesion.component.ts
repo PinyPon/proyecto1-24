@@ -96,8 +96,6 @@ export class IniciosesionComponent {
             text: "Correcto ingreso",
             icon: "success"
           });
-          alert("")
-
           this.servicioRutas.navigate(['/inicio'])
         })
         .catch(err => {

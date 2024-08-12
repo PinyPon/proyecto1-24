@@ -1,4 +1,4 @@
-import * as Crypto from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 import { Component } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario';
 // importamos servicio de autentificación

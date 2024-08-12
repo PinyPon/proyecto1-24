@@ -1,8 +1,9 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GaleriaComponent } from './componentes/galeria/galeria.component';
 import { ServiciosComponent } from './componentes/servicios/servicios.component';
 import { InicioComponent } from './modules/inicio/components/inicio/inicio.component';
+
 
 const routes: Routes = [
  /* {

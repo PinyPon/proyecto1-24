@@ -12,7 +12,7 @@
           <form action="">
             <mat-form-field appearance="fill" required>
               <mat-label>Correo electrónico</mat-label>
-              <input [(ngModel)]="usuarios.email" matInput placeholder="Ej: Pepa_Popón">
+              <input type="text" [(ngModel)]="usuarios.email" matInput placeholder="Ej: Pepa_Popón">
               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
               <mat-hint>Ingrese correo electrónico</mat-hint>
             </mat-form-field>
@@ -24,7 +24,7 @@
           <mat-form-field>
             <mat-label>Ingresa contraseña</mat-label>
             <input [(ngModel)]="usuarios.password"  matInput [type]="hide ? 'password' : 'text'" #input minlength="6">
-            <button class="iconocontraseña" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <button class="iconocontrasena" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
               <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
             <mat-hint aling="start">6/{{input.value.length}}</mat-hint>
