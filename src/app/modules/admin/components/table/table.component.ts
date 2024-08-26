@@ -57,6 +57,7 @@ export class TableComponent {
             title: "¡Producto cargado!",
             icon: "success"
           });
+          this.producto.reset();
         })
         .catch(error => {
           Swal.fire({
@@ -64,6 +65,7 @@ export class TableComponent {
             title: "Oops...",
             text: "No pudimos guardar tu producto",
           });
+          this.producto.reset();
         })
     }
 
@@ -79,10 +81,60 @@ export class TableComponent {
 borrarProducto(){ 
   this.servicioCrud.eliminarProducto(this.productoSeleccionado.idProducto)
   .then(respuesta=>{
-    alert ("no se pudo")
+    Swal.fire({
+      title: "¡Producto cargado!",
+      icon: "success"
+    });
   })
   .catch(error=>{
-    alert("si se pudo")
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "No pudimos guardar tu producto",
+    });
   })
 }
+
+//EDITAR PRODUCTOS
+mostrarEditar(productoSeleccionado: Producto){
+  this.producto.setValue({
+  nombre  : productoSeleccionado.nombre,
+  precio  : productoSeleccionado.precio,
+  descripcion  : productoSeleccionado.descripcion,
+  categoria  : productoSeleccionado.categoria,
+  imagen  : productoSeleccionado.imagen,
+  alt  : productoSeleccionado.alt
+  })
+}
+
+//Vincula a evento clic
+editarProducto(){
+  let dato: Producto= {
+    // Solo id Producto no se modifica por el usuario
+    idProducto: this.productoSeleccionado.idProducto,
+
+    nombre: this.producto.value.nombre!,
+    precio: this.producto.value.precio!,
+    descripcion: this.producto.value.descripcion!,  
+    categoria: this.producto.value.categoria!,
+    imagen: this.producto.value.imagen!,    
+    alt: this.producto.value.alt!
+  }
+  this.servicioCrud.modificarProducto(this.productoSeleccionado.idProducto, dato)
+  .then(producto => {
+    Swal.fire({
+      title: "¡Producto cargado!",
+      icon: "success"
+    });
+  })
+  .catch(error => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "No pudimos guardar tu producto",
+    });
+  })
+}
+
+
 }
