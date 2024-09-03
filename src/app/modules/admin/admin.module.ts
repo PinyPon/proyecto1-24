@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 // Archivo de rutas del módulo
 import { AdminRoutingModule } from './admin-routing.module';
 
-
 // Vista
 import { AdminComponent } from './page/admin/admin.component';
 

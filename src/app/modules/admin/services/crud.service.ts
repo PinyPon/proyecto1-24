@@ -33,7 +33,6 @@ export class CrudService {
     })
   }
 
-
   // OBTENER productos
   obtenerProducto(){
     /*
@@ -46,23 +45,26 @@ export class CrudService {
   }
 
   // EDITAR productos
-  modificarProducto(idProducto: string, nuevaData:  Producto){
-    return this.database.collection('productos').doc(idProducto).update(nuevaData);
+  modificarProducto(idProducto: string, nuevaData: Producto){
+    /*
+      Accedemos a la colección "productos" de la Base de Datos, buscamos el ID del 
+      producto seleccionado y lo actualizamos con el método "update", enviando la 
+      nueva información
+    */
+    return this.database.collection('producto').doc(idProducto).update(nuevaData);
   }
 
   // ELIMINAR productos
   eliminarProducto(idProducto: string){
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
       try{
         const respuesta = this.productosCollection.doc(idProducto).delete();
-  
-        resolve(respuesta)
+
+        resolve (respuesta);
       }
       catch(error){
-        reject(error);
+        reject (error);
       }
     })
   }
-  
-
 }

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Producto } from 'src/app/models/producto';
 import { CrudService } from 'src/app/modules/admin/services/crud.service';
+
 
 
 @Component({
@@ -16,6 +18,11 @@ export class CardComponent {
 
   modalVisible: boolean = false;
 
+  //Directiva para comunicarse con el componente padre
+  @Input() productoReciente: string = '';
+  
+  @Output() productoAgregado = new EventEmitter<Producto>();//@Output será definido como un nuevo evento
+
   constructor(public servicioCrud: CrudService){}
 
   ngOnInit(): void{
@@ -29,5 +36,9 @@ export class CardComponent {
     this.modalVisible = true;
 
     this.productoSeleccionado = info;
+  }
+
+  agregarProducto(info : Producto){
+    this.productoAgregado.emit(info);
   }
 }

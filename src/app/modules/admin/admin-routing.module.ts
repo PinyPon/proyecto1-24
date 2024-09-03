@@ -4,8 +4,7 @@ import { AdminComponent } from './page/admin/admin.component';
 import { TableComponent } from './components/table/table.component';
 
 const routes: Routes = [
-
-    // RUTA INICIAL / PRINCIPAL AL COMPONENTE
+  
     {
       path:"admin",component: AdminComponent
     },
