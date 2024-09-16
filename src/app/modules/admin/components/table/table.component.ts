@@ -89,6 +89,7 @@ export class TableComponent {
     // Variable para crear un nuevo objeto del tipo "archivo" o "file"  y leerlo
     let reader = new FileReader();
 
+    // Si el archivo NO está indefinido
     if (archivo != undefined) {
       //llamamos al metodo readAsDataURL par leer toda la información recibida
       // Enviamos como parametro al "archivo" porque será el encargade de ttener 

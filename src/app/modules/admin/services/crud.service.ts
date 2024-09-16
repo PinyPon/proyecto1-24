@@ -123,7 +123,7 @@ private storage = getStorage();
       .then(resp =>{
         return resp;
       })
-// Doble control
+// Doble control de errores
       return this.respuesta;
     } catch (error) {
       console.log(error)
