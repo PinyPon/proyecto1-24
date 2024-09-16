@@ -3,6 +3,7 @@ import { Producto } from 'src/app/models/producto';
 import { CrudService } from '../../services/crud.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -16,6 +17,10 @@ export class TableComponent {
 
   modalVisibleProducto: boolean = false;
 
+  nombreImagen!: string; // obtendra el nombre de la imagen
+
+  imagen!: string;// obtendra la ruta de la imagen
+
   // Definimos formulario para los productos
   /**
    * Atributos alfanuméricos (string) se inicializan con comillas simples
@@ -26,7 +31,8 @@ export class TableComponent {
     precio: new FormControl(0, Validators.required),
     descripcion: new FormControl('', Validators.required),
     categoria: new FormControl('', Validators.required),
-    imagen: new FormControl('', Validators.required),
+    //imagen: new FormControl('', Validators.required),
+
     alt: new FormControl('', Validators.required)
   })
 
@@ -47,24 +53,63 @@ export class TableComponent {
         precio: this.producto.value.precio!,
         descripcion: this.producto.value.descripcion!,
         categoria: this.producto.value.categoria!,
-        imagen: this.producto.value.imagen!,
+        imagen: '',
         alt: this.producto.value.alt!
       }
 
-      await this.servicioCrud.crearProducto(nuevoProducto)
-        .then(producto => {
-          alert("Ha agregado un nuevo producto con éxito.");
+      // Enviamos nombre y url de la imagen; definimos carpetas de imagenes como "productos"
+      await this.servicioCrud.subirImagen(this.nombreImagen, this.imagen, "productos")
+      .then(resp => {
+        this.servicioCrud.obtenerUrlImagen(resp)
+        .then(url => {
 
-          // Resetea el formulario y las casillas quedan vacías
-          this.producto.reset();
+          // ahora el método crearProductos recibe datos del formulario y 8URL creada
+          this.servicioCrud.crearProducto(nuevoProducto, url)
+          .then(producto => {
+            alert("Ha agregado un nuevo producto con éxito.");
+  
+            // Resetea el formulario y las casillas quedan vacías
+            this.producto.reset();
+          })
+          .catch(error => {
+            alert("Ha ocurrido un error al cargar un producto.");
+  
+            this.producto.reset();
+          })
         })
-        .catch(error => {
-          alert("Ha ocurrido un error al cargar un producto.");
-
-          this.producto.reset();
-        })
+      })
     }
   }
+
+  // CARGAR IMAGEN
+  cargarImagen(event: any){
+    // Variable para obtener el archivo subido desde el input del HTML
+    let archivo = event.target.files[0];
+
+    // Variable para crear un nuevo objeto del tipo "archivo" o "file"  y leerlo
+    let reader = new FileReader();
+
+    if (archivo != undefined) {
+      //llamamos al metodo readAsDataURL par leer toda la información recibida
+      // Enviamos como parametro al "archivo" porque será el encargade de ttener 
+      // la info ingresada por el usuario
+      reader.readAsDataURL(archivo);
+
+      // Definimos
+      reader.onloadend = () => {
+        let url = reader.result;
+
+        if(url != null){
+          // Definimos nombre de la imagen
+          this.nombreImagen = archivo.name;
+
+          this.imagen = url.toString();
+        }
+
+      }
+    }
+  }
+
 
   // ELIMINAR PRODUCTOS
   // función vinculada al modal y el botón de la tabla
