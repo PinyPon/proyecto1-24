@@ -57,56 +57,58 @@ export class TableComponent {
         alt: this.producto.value.alt!
       }
 
-      // Enviamos nombre y url de la imagen; definimos carpetas de imagenes como "productos"
+      // Enviamos nombre y url de la imagen; definimos carpeta de imágenes como "productos"
       await this.servicioCrud.subirImagen(this.nombreImagen, this.imagen, "productos")
-      .then(resp => {
-        this.servicioCrud.obtenerUrlImagen(resp)
-        .then(url => {
+        .then(resp => {
+          // encapsulamos respuesta y envíamos la información obtenida
+          this.servicioCrud.obtenerUrlImagen(resp)
+            .then(url => {
+              // ahora método crearProducto recibe datos del formulario y URL creada
+              this.servicioCrud.crearProducto(nuevoProducto, url)
+                .then(producto => {
+                  alert("Ha agregado un nuevo producto con éxito.");
 
-          // ahora el método crearProductos recibe datos del formulario y 8URL creada
-          this.servicioCrud.crearProducto(nuevoProducto, url)
-          .then(producto => {
-            alert("Ha agregado un nuevo producto con éxito.");
-  
-            // Resetea el formulario y las casillas quedan vacías
-            this.producto.reset();
-          })
-          .catch(error => {
-            alert("Ha ocurrido un error al cargar un producto.");
-  
-            this.producto.reset();
-          })
+                  // Resetea el formulario y las casillas quedan vacías
+                  this.producto.reset();
+                })
+                .catch(error => {
+                  alert("Ha ocurrido un error al cargar un producto.");
+
+                  this.producto.reset();
+                })
+            })
         })
-      })
     }
   }
 
-  // CARGAR IMAGEN
-  cargarImagen(event: any){
+  // CARGAR IMÁGENES
+  cargarImagen(event: any) {
     // Variable para obtener el archivo subido desde el input del HTML
     let archivo = event.target.files[0];
 
-    // Variable para crear un nuevo objeto del tipo "archivo" o "file"  y leerlo
+    // Variable para crear un nuevo objeto de tipo "archivo" o "file" y leerlo
     let reader = new FileReader();
 
-    // Si el archivo NO está indefinido
     if (archivo != undefined) {
-      //llamamos al metodo readAsDataURL par leer toda la información recibida
-      // Enviamos como parametro al "archivo" porque será el encargade de ttener 
-      // la info ingresada por el usuario
+      /*
+        Llamamos a método readAsDataURL para leer toda la información recibida
+        Envíamos como parámetro al "archivo" porque será el encargador de tener la 
+        info ingresada por el usuario
+      */
       reader.readAsDataURL(archivo);
 
-      // Definimos
+      // Definimos qué haremos con la información mediante función flecha
       reader.onloadend = () => {
         let url = reader.result;
 
-        if(url != null){
-          // Definimos nombre de la imagen
+        // Condicionamos según una URL existente y no "nula"
+        if (url != null) {
+          // Definimos nombre de la imagen con atributo "name" del input
           this.nombreImagen = archivo.name;
 
+          // Definimos ruta de la imagen según la url recibida
           this.imagen = url.toString();
         }
-
       }
     }
   }
@@ -114,42 +116,52 @@ export class TableComponent {
 
   // ELIMINAR PRODUCTOS
   // función vinculada al modal y el botón de la tabla
-  mostrarBorrar(productoSeleccionado: Producto){
+  mostrarBorrar(productoSeleccionado: Producto) {
     this.modalVisibleProducto = true;
 
     this.productoSeleccionado = productoSeleccionado;
   }
 
-  borrarProducto(){
-    this.servicioCrud.eliminarProducto(this.productoSeleccionado.idProducto)
-    .then(respuesta => {
-      alert("Se ha podido eliminar con éxito.");
-    })
-    .catch(error => {
-      alert("Ha ocurrido un error al eliminar un producto: \n"+error);
-    })
+  borrarProducto() {
+    /*
+    Ahora enviamos tnto el ID del producto (para identificarlo en Firebase)
+    y la url de la imagen (para identificarlo en Storage)}
+    ID y URL son, a grandes rasgos, lo mismo, ya que ambos son 
+    */
+
+    this.servicioCrud.eliminarProducto(this.productoSeleccionado.idProducto, this.productoSeleccionado.imagen)
+      .then(respuesta => {
+        alert("Se ha podido eliminar con éxito.");
+      })
+      .catch(error => {
+        alert("Ha ocurrido un error al eliminar un producto: \n" + error);
+      })
   }
 
   // EDITAR PRODUCTOS
   // Se envía y llama al momento que tocamos botón "Editar" de la tabla
-  mostrarEditar(productoSeleccionado: Producto){
+  mostrarEditar(productoSeleccionado: Producto) {
     this.productoSeleccionado = productoSeleccionado;
     /*
       Toma los valores del producto seleccionado y los va a
-      autocompletar en el formulario del modal (menos el ID)
+      autocompletar en el formulario del modal 
+      (menos el ID y la URL de la imagen)
     */
     this.producto.setValue({
       nombre: productoSeleccionado.nombre,
       precio: productoSeleccionado.precio,
       descripcion: productoSeleccionado.descripcion,
       categoria: productoSeleccionado.categoria,
-      imagen: productoSeleccionado.imagen,
+      // imagen: productoSeleccionado.imagen,
       alt: productoSeleccionado.alt
     })
   }
 
+
+ 
+
   // VINCULA A BOTÓN "editarProducto" del modal de "Editar"
-  editarProducto(){
+  editarProducto() {
     let datos: Producto = {
       // Solo idProducto no se modifica por el usuario
       idProducto: this.productoSeleccionado.idProducto,
@@ -159,17 +171,47 @@ export class TableComponent {
       precio: this.producto.value.precio!,
       descripcion: this.producto.value.descripcion!,
       categoria: this.producto.value.categoria!,
-      imagen: this.producto.value.imagen!,
+      imagen: this.productoSeleccionado.imagen,
       alt: this.producto.value.alt!
     }
 
+    // Verificamos si el usuario ingresa o no una nueva imagen
+    if (this.imagen) {
+      this.servicioCrud.subirImagen(this.nombreImagen, this.imagen, "producto")
+        .then(resp => {
+          this.servicioCrud.obtenerUrlImagen(resp)
+          .then(url => {
+            datos.imagen = url; // Actualizamos la url de la imagen en los datos del formulario
+
+            this.actualizarProductos(datos); // Actualizamos los datos
+
+            this.producto.reset(); // Vaciamos las casillas del formularo
+          })
+          .catch(error => {
+            alert("Hubo un error al cargar la imagen \n" + error);
+
+            this.producto.reset();
+          })
+        })
+    }else{
+      /*
+      Actualizamos formularios con los datos recividos del usuario, pero sin
+      modificar la imagen ya existente en Firestore y Storage
+      */
+      this.actualizarProductos(datos);
+    }
+  }
+
+
+  actualizarProductos(datos: Producto){
     // Enviamos al método el id del producto seleccionado y los datos actualizados
     this.servicioCrud.modificarProducto(this.productoSeleccionado.idProducto, datos)
-    .then(producto => {
-      alert("El producto se ha modificado con éxito.");
-    })
-    .catch(error => {
-      alert("Hubo un problema al modificar el producto: \n"+error);
-    })
+      .then(producto => {
+        alert("El producto se ha modificado con éxito.");
+      })
+      .catch(error => {
+        alert("Hubo un problema al modificar el producto: \n" + error);
+      })
   }
+
 }
